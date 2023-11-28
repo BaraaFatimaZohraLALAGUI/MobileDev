@@ -1,6 +1,5 @@
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:world_time_app/services/world_time.dart';
 
 class Loading extends StatefulWidget {
   const Loading({Key? key}) : super(key: key);
@@ -10,32 +9,37 @@ class Loading extends StatefulWidget {
 }
 
 class _LoadingState extends State<Loading> {
+  String load = 'Loading ...';
 
-  void getData() async {
-    var response =
-        await get(Uri.https('jsonplaceholder.typicode.com', '/todos/1'));
-    // var data = jsonDecode(response.body) as Map;
-    print(response.body);
+  void setupWorldTime() async {
+    WorldTime thing = WorldTime(
+        location: 'Berlin', flag: 'germany.png', url: 'Europe/Berlin');
+    await thing.getTime();
+    Navigator.pushReplacementNamed(context, '/home', arguments: {'location': thing.location, 'flag': thing.flag, 'time': thing.time });
   }
 
   @override
   void initState() {
     super.initState();
-    getData();
+
+    setupWorldTime();
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: SafeArea(child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: EdgeInsets.all(50.0),
-            child: Text('data'),
-          ),
-        ],
-      )),
+    return Scaffold(
+      body: Center(
+        child: SafeArea(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(50.0),
+              child: Text(load),
+            ),
+          ],
+        )),
+      ),
     );
   }
 }
