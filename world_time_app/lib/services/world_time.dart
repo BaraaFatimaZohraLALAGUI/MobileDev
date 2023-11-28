@@ -7,6 +7,7 @@ class WorldTime {
   late String location; // location name for the UI
   late String flag; // url to an asset flag icon
   late String url; //location url for api end point
+  bool daytime = true;
 
   WorldTime({required this.location, required this.flag, required this.url});
 
@@ -26,10 +27,9 @@ class WorldTime {
       // making datetime object
       DateTime now = DateTime.parse(datetime);
       now = now.add(Duration(hours: int.parse(offset)));
+      daytime = now.hour > 6 && now.hour < 20 ? true : false;
       time = DateFormat.yMd().add_jm().format(now).toString();
-
     } catch (e) {
-
       print('caught error: $e');
       time = 'could not get time data';
     }
